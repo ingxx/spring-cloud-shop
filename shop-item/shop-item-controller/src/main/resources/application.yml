@@ -1,0 +1,16 @@
+server:
+  port: 8080 #端口号
+
+spring:
+  application:
+    name: item-service #服务名称 在消费者调用时需要
+  datasource:
+    url: jdbc:mysql://localhost:3306/pinyougoudb?useSSL=false
+    username: root
+    password: q531433326
+eureka:
+  instance:
+    hostname: localhost  #域名
+  client:
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:8888/eureka  #eureka的地址
