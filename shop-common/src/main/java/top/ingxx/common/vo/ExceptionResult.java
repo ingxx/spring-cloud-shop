@@ -5,7 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 import top.ingxx.common.enums.ExceptionEnum;
 
-/**
+/***
  * 返回给前端的异常对象
  */
 @ToString

@@ -12,8 +12,11 @@ import top.ingxx.common.vo.ExceptionResult;
 @ControllerAdvice
 public class CommonExceptionHandler {
     //捕获自定义类型的异常
-    /**
-     * 接受一个异常对象
+
+    /***
+     *
+     * @param em 自定义异常对象
+     * @return
      */
     @ExceptionHandler(ShopException.class)
     public ResponseEntity<ExceptionResult> handException(ShopException em){

@@ -11,6 +11,7 @@
         <module>shop-eureka-server</module>
         <module>shop-item</module>
         <module>shop-common</module>
+        <module>shop-manager-web</module>
     </modules>
 
     <packaging>pom</packaging>

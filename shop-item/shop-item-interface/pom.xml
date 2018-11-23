@@ -11,5 +11,16 @@
     <packaging>jar</packaging>
     <artifactId>shop-item-interface</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>top.ingxx</groupId>
+            <artifactId>shop-item-pojo</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
