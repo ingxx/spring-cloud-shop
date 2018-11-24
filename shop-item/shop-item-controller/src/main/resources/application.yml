@@ -13,4 +13,4 @@ eureka:
     hostname: localhost  #域名
   client:
     service-url:
-      defaultZone: http://${eureka.instance.hostname}:8888/eureka  #eureka的地址
+      defaultZone: http://${eureka.instance.hostname}:10086/eureka  #eureka的地址

@@ -1,5 +1,5 @@
 server: #端口号
-  port: 8888
+  port: 10086
 
 eureka: #eureka中心域名
   instance:

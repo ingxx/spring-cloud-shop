@@ -1,0 +1,16 @@
+server:
+  port: 10010
+spring:
+  application:
+    name: zuul-service
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:10086/eureka
+zuul:
+  routes:
+    item-service: /item/**
+  prefix: /api          #路由前缀前缀
+  strip-prefix: true    #是否去掉前缀 去掉以后访问 /api/item/brand/findAll  会去掉api 找到转发的服务 然后将 /brand/fandAll转发
+
+

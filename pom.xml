@@ -12,6 +12,7 @@
         <module>shop-item</module>
         <module>shop-common</module>
         <module>shop-manager-web</module>
+        <module>shop-zuul-server</module>
     </modules>
 
     <packaging>pom</packaging>
