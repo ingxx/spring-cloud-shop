@@ -18,7 +18,7 @@
 
 		app.controller('brandController',function ($scope,$http) {
 			$scope.findAll=function () {
-				$http.get('http://localhost:8080/brand/findAll').success(function (date) {
+				$http.get('http://api.shop.com/api/item/brand/findAll').success(function (date) {
 					console.log(date);
                 }).error(console.log(111));
             }

@@ -13,4 +13,16 @@ zuul:
   prefix: /api          #路由前缀前缀
   strip-prefix: true    #是否去掉前缀 去掉以后访问 /api/item/brand/findAll  会去掉api 找到转发的服务 然后将 /brand/fandAll转发
 
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 6000  #熔断时间
 
+ribbon:
+  ConnectTimeout: 1000
+  ReadTimeout: 2000
+  MaxAutoRetries: 0       #当前服务重试次数
+  MaxAutoRetriesNextServer: 0 #切换服务重试次数
