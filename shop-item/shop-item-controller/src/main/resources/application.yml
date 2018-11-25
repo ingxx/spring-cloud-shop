@@ -14,3 +14,10 @@ eureka:
   client:
     service-url:
       defaultZone: http://${eureka.instance.hostname}:10086/eureka  #eureka的地址
+
+#指定数据库类型
+pagehelper:
+  helperDialect: mysql
+#合理化分页，如果超出显示最后一页
+  reasonable: true
+  supportMethodsArguments: true
