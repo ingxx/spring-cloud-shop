@@ -17,7 +17,6 @@
 
     <script type="text/javascript">
         var app = angular.module('shop', ['pagination']);
-
         app.controller('brandController', function ($scope, $http) {
             $scope.findAll = function () {
                 $http.get('http://api.shop.com/api/item/brand/findAll').success(function (date) {
@@ -42,6 +41,16 @@
                         $scope.list = date.rows;
                         $scope.paginationConf.totalItems = date.total;
                     })
+            };
+            $scope.add= function () {
+                $http.post('http://api.shop.com/api/item/brand/add',$scope.brand).success(
+                    function (date) {
+                        if (date.status=="200"){
+                            $scope.reloadList();
+                        }else{
+                            console.log("增加失败")
+                        }
+                })
             }
         });
 
@@ -127,16 +136,16 @@
                 <table class="table table-bordered table-striped" width="800px">
                     <tr>
                         <td>品牌名称</td>
-                        <td><input class="form-control" placeholder="品牌名称"></td>
+                        <td><input class="form-control" placeholder="品牌名称" ng-model="brand.name"></td>
                     </tr>
                     <tr>
                         <td>首字母</td>
-                        <td><input class="form-control" placeholder="首字母"></td>
+                        <td><input class="form-control" placeholder="首字母" ng-model="brand.firstChar"></td>
                     </tr>
                 </table>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-success" data-dismiss="modal" aria-hidden="true">保存</button>
+                <button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="add()">保存</button>
                 <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
             </div>
         </div>

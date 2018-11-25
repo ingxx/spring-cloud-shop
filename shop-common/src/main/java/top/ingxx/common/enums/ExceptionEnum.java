@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 public enum ExceptionEnum {
     UNKONW_ERROR(-1, "未知错误"),
     PRICE_CANNOT_BE_NULL(400,"价格不能为空!"),
+    INSTALL_BRAND_ERROR(400,"新增品牌失败!"),
     ;
     private Integer code;  //状态码
     private String msg;    //错误信息
