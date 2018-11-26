@@ -20,13 +20,13 @@ public class BrandController {
     private BrandService brandService;
 
     @GetMapping("/findAll")
-    public ResponseEntity<List<Brand>> findAll() {
+    public ResponseEntity<Result<List<Brand>>> findAll() {
         return ResponseEntity.ok(brandService.selectAll());
     }
 
     @GetMapping("/findPage")
-    public ResponseEntity<PageVo> findPage(int page, int size) {
-        PageVo pageVo = brandService.findPage(page, size);
+    public ResponseEntity<Result<PageVo>> findPage(int page, int size) {
+        Result<PageVo> pageVo = brandService.findPage(page, size);
         return ResponseEntity.ok(pageVo);
     }
 
@@ -37,8 +37,14 @@ public class BrandController {
      * @return
      */
     @PostMapping("/add")
-    public ResponseEntity<Result> add(@RequestBody Brand brand){
-        Result result = brandService.add(brand);
+    public ResponseEntity<Result<String>> add(@RequestBody Brand brand){
+        Result<String> result = brandService.add(brand);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/selectById/{id}")
+    public ResponseEntity<Result<Brand>> selectById(@PathVariable(value = "id") Long id){
+        Result<Brand> result = brandService.findOne(id);
         return ResponseEntity.ok(result);
     }
 }

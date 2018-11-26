@@ -25,8 +25,14 @@ public class BrandService {
      * 查询所有品牌
      * @return
      */
-    public List<Brand> selectAll() {
-        return brandDao.selectAll();
+    public Result<List<Brand>> selectAll() {
+        try {
+            return Result.success(brandDao.selectAll());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return Result.error(400, "查询失败");
+        }
+
     }
 
     /***
@@ -34,10 +40,16 @@ public class BrandService {
      * @param pageNum 当前页面数
      * @param pageSize  页面显示条数
      */
-    public PageVo findPage(int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        Page<Brand> brands = (Page<Brand>) brandDao.selectAll();
-        return new PageVo(brands.getTotal(), brands.getResult());
+    public Result<PageVo> findPage(int pageNum, int pageSize) {
+        try {
+            PageHelper.startPage(pageNum, pageSize);
+            Page<Brand> brands = (Page<Brand>) brandDao.selectAll();
+            return Result.success(new PageVo(brands.getTotal(), brands.getResult()));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return Result.error(400, "查询失败");
+        }
+
     }
 
     /***
@@ -45,15 +57,37 @@ public class BrandService {
      * @param brand 新增对象
      * @return
      */
-    public Result add(Brand brand) {
-        try {
-            log.info(brand.toString());
-            brandDao.insert(brand);
-        }catch (Exception e){
+    public Result<String> add(Brand brand) {
+        if (brand == null) {
             throw new ShopException(ExceptionEnum.INSTALL_BRAND_ERROR);
         }
-        return new Result(200,"增加成功");
+        try {
+            brandDao.insert(brand);
+            return Result.success(null);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return Result.error(400,"新增失败");
+        }
     }
 
+    /***
+     * 根据ID查找品牌
+     * @param id  商品ID
+     * @return
+     */
+    public Result<Brand> findOne(Long id) {
+        try {
+            Brand brand = brandDao.selectByPrimaryKey(id);
+            log.info(brand.toString());
+            return Result.success(brand);
+        }catch (Exception e) {
+            log.error(e.getMessage());
+            return Result.error(400,"查询失败");
+        }
 
+    }
+
+//    public Brand update(Brand brand){
+//       return   brandDao.updateByPrimaryKey(brand);
+//    }
 }
