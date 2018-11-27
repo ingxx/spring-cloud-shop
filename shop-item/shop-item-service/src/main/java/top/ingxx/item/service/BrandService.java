@@ -29,7 +29,8 @@ public class BrandService {
         try {
             return Result.success(brandDao.selectAll());
         } catch (Exception e) {
-            log.error(e.getMessage());
+            e.printStackTrace();
+            log.error("查询失败",e);
             return Result.error(400, "查询失败");
         }
 
@@ -46,7 +47,8 @@ public class BrandService {
             Page<Brand> brands = (Page<Brand>) brandDao.selectAll();
             return Result.success(new PageVo(brands.getTotal(), brands.getResult()));
         } catch (Exception e) {
-            log.error(e.getMessage());
+            e.printStackTrace();
+            log.error("查询失败",e);
             return Result.error(400, "查询失败");
         }
 
@@ -65,7 +67,8 @@ public class BrandService {
             brandDao.insert(brand);
             return Result.success(null);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            e.printStackTrace();
+            log.error("新增失败",e);
             return Result.error(400,"新增失败");
         }
     }
@@ -78,16 +81,23 @@ public class BrandService {
     public Result<Brand> findOne(Long id) {
         try {
             Brand brand = brandDao.selectByPrimaryKey(id);
-            log.info(brand.toString());
             return Result.success(brand);
         }catch (Exception e) {
-            log.error(e.getMessage());
+            e.printStackTrace();
+            log.error("查询失败",e);
             return Result.error(400,"查询失败");
         }
 
     }
 
-//    public Brand update(Brand brand){
-//       return   brandDao.updateByPrimaryKey(brand);
-//    }
+    public Result<String> update(Brand brand){
+       try{
+           brandDao.updateByPrimaryKey(brand);
+           return Result.success("更新成功");
+       }catch (Exception e){
+           e.printStackTrace();
+           log.error("更新失败",e);
+           return Result.error(400,"更新失败");
+       }
+    }
 }

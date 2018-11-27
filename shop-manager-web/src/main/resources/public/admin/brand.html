@@ -14,13 +14,14 @@
     <script src="../plugins/angularjs/angular.min.js"></script>
     <script src="../plugins/angularjs/pagination.js"></script>
     <link rel="stylesheet" href="../plugins/angularjs/pagination.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
     <script type="text/javascript">
         var app = angular.module('shop', ['pagination']);
         app.controller('brandController', function ($scope, $http) {
             $scope.findAll = function () {
-                $http.get('http://api.shop.com/api/item/brand/findAll').success(function (date) {
-                    $scope.list = date;
+                $http.get('http://api.shop.com/api/item/brand/findAll').success(function (data) {
+                    $scope.list = data.data;
                 }).error("请求错误");
             };
             $scope.paginationConf = {
@@ -32,31 +33,54 @@
                     $scope.reloadList();
                 }
             };
-            $scope.reloadList = function(){
+            $scope.reloadList = function () {
                 $scope.findPage($scope.paginationConf.currentPage, $scope.paginationConf.itemPerPage);
             };
             $scope.findPage = function (page, size) {
                 $http.get('http://api.shop.com/api/item/brand/findPage?page=' + page + '&size=' + size).success(
-                    function (date) {
-                        $scope.list = date.rows;
-                        $scope.paginationConf.totalItems = date.total;
+                    function (data) {
+                        $scope.list = data.data.rows;
+                        $scope.paginationConf.totalItems = data.data.total;
                     })
             };
-            $scope.add= function () {
-                $http.post('http://api.shop.com/api/item/brand/add',$scope.brand).success(
-                    function (date) {
-                        if (date.status=="200"){
-                            $scope.reloadList();
-                        }else{
-                            console.log("增加失败")
+            $scope.save = function () {
+                if ($scope.brand.id == null) {
+                    $http.post('http://api.shop.com/api/item/brand/add', $scope.brand).success(
+                        function (data) {
+                            if (data.status == "200") {
+                                $scope.reloadList();
+                            } else {
+                                console.log("增加失败")
+                            }
+                        })
+                }else{
+                    axios.put("http://api.shop.com/api/item/brand/update",$scope.brand).then(
+                        function (data) {
+                            if (data.status == "200") {
+                                $scope.reloadList();
+                            } else {
+                                console.log("更新失败")
+                            }
                         }
-                })
+                    )
+                }
+                $scope.brand = null;
+            }
+            $scope.findOne = function (id) {
+                $http.get('http://api.shop.com/api/item/brand/findById/' + id).success(
+                    function (data) {
+                        if (data.status == "200") {
+                            $scope.brand = data.data;
+                        } else {
+                            console.log("更新失败")
+                        }
+                    })
             }
         });
 
     </script>
 </head>
-<body class="hold-transition skin-red sidebar-mini" ng-app="shop" ng-controller="brandController" >
+<body class="hold-transition skin-red sidebar-mini" ng-app="shop" ng-controller="brandController">
 <!-- .box-body -->
 <div class="box-header with-border">
     <h3 class="box-title">品牌管理</h3>
@@ -106,9 +130,10 @@
                 <td><input type="checkbox"></td>
                 <td>{{entity.id}}</td>
                 <td>{{entity.name}}</td>
-                <td>{{entity.first_char}}</td>
+                <td>{{entity.firstChar}}</td>
                 <td class="text-center">
-                    <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal">修改
+                    <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal"
+                            ng-click="findOne(entity.id)">修改
                     </button>
                 </td>
             </tr>
@@ -145,7 +170,7 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="add()">保存</button>
+                <button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="save()">保存</button>
                 <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
             </div>
         </div>

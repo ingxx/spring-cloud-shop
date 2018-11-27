@@ -5,7 +5,7 @@ spring:
   application:
     name: item-service #服务名称 在消费者调用时需要
   datasource:
-    url: jdbc:mysql://localhost:3306/pinyougoudb?useSSL=false
+    url: jdbc:mysql://localhost:3306/pinyougoudb?useSSL=false&useUnicode=true&characterEncoding=utf-8
     username: root
     password: q531433326
 eureka:
@@ -14,10 +14,14 @@ eureka:
   client:
     service-url:
       defaultZone: http://${eureka.instance.hostname}:10086/eureka  #eureka的地址
-
 #指定数据库类型
 pagehelper:
   helperDialect: mysql
 #合理化分页，如果超出显示最后一页
   reasonable: true
   supportMethodsArguments: true
+
+#显示sql语句
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

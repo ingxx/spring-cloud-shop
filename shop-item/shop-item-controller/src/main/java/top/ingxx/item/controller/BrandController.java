@@ -31,9 +31,10 @@ public class BrandController {
     }
 
     /***
+     * 新增品牌
      * jQuery传输数据使用了Content-Type: x-www-form-urlencodedand
      * AngularJS传输数据使用了Content-Type: application/json
-     * @param brand
+     * @param brand 商品实体
      * @return
      */
     @PostMapping("/add")
@@ -42,9 +43,16 @@ public class BrandController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/selectById/{id}")
-    public ResponseEntity<Result<Brand>> selectById(@PathVariable(value = "id") Long id){
+    @GetMapping("/findById/{id}")
+    public ResponseEntity<Result<Brand>> findById(@PathVariable(value = "id") Long id){
         Result<Brand> result = brandService.findOne(id);
+        return ResponseEntity.ok(result);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<Result<String>> update(@RequestBody Brand brand){
+        log.info(brand.toString());
+        Result<String> result = brandService.update(brand);
         return ResponseEntity.ok(result);
     }
 }
