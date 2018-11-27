@@ -5,6 +5,9 @@ import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.util.StringUtil;
 import top.ingxx.common.enums.ExceptionEnum;
 import top.ingxx.common.exception.ShopException;
 import top.ingxx.common.vo.PageVo;
@@ -30,7 +33,7 @@ public class BrandService {
             return Result.success(brandDao.selectAll());
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("查询失败",e);
+            log.error("查询失败", e);
             return Result.error(400, "查询失败");
         }
 
@@ -48,10 +51,32 @@ public class BrandService {
             return Result.success(new PageVo(brands.getTotal(), brands.getResult()));
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("查询失败",e);
+            log.error("查询失败", e);
             return Result.error(400, "查询失败");
         }
+    }
 
+    public Result<PageVo> findPage(Brand brand, int pageNum, int pageSize) {
+        try {
+            PageHelper.startPage(pageNum,pageSize);
+            Page<Brand> brands = new Page<>();
+            if(brand != null){
+                Example ex = new Example(Brand.class);
+                Example.Criteria criteria = ex.createCriteria();
+                if(StringUtil.isNotEmpty(brand.getName())){
+                    criteria.andLike("name","%"+brand.getName()+"%");
+                }
+                if (StringUtil.isNotEmpty(brand.getFirstChar())){
+                    criteria.andLike("firstChar","%"+brand.getFirstChar()+"%");
+                }
+                brands  = (Page<Brand>) brandDao.selectByExample(ex);
+            }
+            return Result.success(new PageVo(brands.getTotal(), brands.getResult()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("查询失败", e);
+            return Result.error(400, "查询失败");
+        }
     }
 
     /***
@@ -68,8 +93,8 @@ public class BrandService {
             return Result.success(null);
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("新增失败",e);
-            return Result.error(400,"新增失败");
+            log.error("新增失败", e);
+            return Result.error(400, "新增失败");
         }
     }
 
@@ -82,22 +107,42 @@ public class BrandService {
         try {
             Brand brand = brandDao.selectByPrimaryKey(id);
             return Result.success(brand);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            log.error("查询失败",e);
-            return Result.error(400,"查询失败");
+            log.error("查询失败", e);
+            return Result.error(400, "查询失败");
         }
 
     }
 
-    public Result<String> update(Brand brand){
-       try{
-           brandDao.updateByPrimaryKey(brand);
-           return Result.success("更新成功");
-       }catch (Exception e){
-           e.printStackTrace();
-           log.error("更新失败",e);
-           return Result.error(400,"更新失败");
-       }
+    /***
+     * 更新品牌
+     * @param brand 品牌实体
+     * @return
+     */
+    public Result<String> update(Brand brand) {
+        try {
+            brandDao.updateByPrimaryKey(brand);
+            return Result.success("更新成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("更新失败", e);
+            return Result.error(400, "更新失败");
+        }
     }
+
+    public Result<String> delete(Long[] ids) {
+        try {
+            for (Long id : ids) {
+                brandDao.deleteByPrimaryKey(id);
+            }
+            return Result.success("删除成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("删除失败");
+            return Result.error(400, "删除失败");
+        }
+    }
+
+
 }
