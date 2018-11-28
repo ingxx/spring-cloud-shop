@@ -14,87 +14,11 @@
     <script src="../plugins/angularjs/angular.min.js"></script>
     <script src="../plugins/angularjs/pagination.js"></script>
     <link rel="stylesheet" href="../plugins/angularjs/pagination.css">
-
-    <script type="text/javascript">
-        var app = angular.module('shop', ['pagination']);
-        app.controller('brandController', function ($scope, $http) {
-            $scope.paginationConf = {
-                currentPage: 1,
-                totalItems: 10,
-                itemsPerPage: 10,
-                perPageOptions: [10, 20, 30],
-                onChange: function () {
-                    $scope.reloadList();
-                }
-            };
-            $scope.reloadList = function () {
-                $scope.search($scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
-            };
-            $scope.searchEntity = {};
-            $scope.search = function (page, size) {
-                $http.post('http://api.shop.com/api/item/brand/search?page=' + page + '&size=' + size, $scope.searchEntity).success(
-                    function (data) {
-                        $scope.list = data.data.rows;
-                        $scope.paginationConf.totalItems = data.data.total;
-                    })
-            }
-            $scope.save = function () {
-                if ($scope.brand.id == null) {
-                    $http.post('http://api.shop.com/api/item/brand/add', $scope.brand).success(
-                        function (data) {
-                            if (data.status == "200") {
-                                $scope.reloadList();
-                            } else {
-                                console.log("增加失败")
-                            }
-                        })
-                } else {
-                    $http.post("http://api.shop.com/api/item/brand/update", $scope.brand).success(
-                        function (data) {
-                            if (data.status == "200") {
-                                $scope.reloadList();
-                            } else {
-                                console.log("更新失败")
-                            }
-                        }
-                    )
-                }
-                $scope.brand = null;
-            }
-            $scope.findOne = function (id) {
-                $http.get('http://api.shop.com/api/item/brand/findById/' + id).success(
-                    function (data) {
-                        if (data.status == "200") {
-                            $scope.brand = data.data;
-                        } else {
-                            console.log("更新失败")
-                        }
-                    })
-            }
-            $scope.selectIds = [];
-            $scope.updateSelection = function ($event, id) {
-                if ($event.target.checked) {
-                    $scope.selectIds.push(id);
-                } else {
-                    var index = $scope.selectIds.indexOf(id);
-                    $scope.selectIds.splice(index, 1);
-                }
-            }
-            $scope.delete = function () {
-                $http.get('http://api.shop.com/api/item/brand/delete/' + $scope.selectIds.toString(), null).success(
-                    function (data) {
-                        if (data.status == "200") {
-                            $scope.reloadList();
-                        } else {
-                            console.log("删除失败")
-                        }
-                    }
-                )
-            }
-        });
+    <script src="../js/base_pagination.js"></script>
+    <script src="../js/service/brandService.js"></script>
+    <script src="../js/controller/brandController.js"></script>
 
 
-    </script>
 </head>
 <body class="hold-transition skin-red sidebar-mini" ng-app="shop" ng-controller="brandController">
 <!-- .box-body -->

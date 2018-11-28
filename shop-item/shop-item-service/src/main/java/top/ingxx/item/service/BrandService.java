@@ -5,7 +5,6 @@ import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.util.StringUtil;
 import top.ingxx.common.enums.ExceptionEnum;
@@ -46,9 +45,9 @@ public class BrandService {
      */
     public Result<PageVo> findPage(int pageNum, int pageSize) {
         try {
-            PageHelper.startPage(pageNum, pageSize);
-            Page<Brand> brands = (Page<Brand>) brandDao.selectAll();
-            return Result.success(new PageVo(brands.getTotal(), brands.getResult()));
+            PageHelper.startPage(pageNum, pageSize); //分页助手
+            Page<Brand> brands = (Page<Brand>) brandDao.selectAll(); //封装成pageVo返回
+            return Result.success(new PageVo(brands.getTotal(), brands.getResult())); //封装成通用返回对象
         } catch (Exception e) {
             e.printStackTrace();
             log.error("查询失败", e);
@@ -56,6 +55,13 @@ public class BrandService {
         }
     }
 
+    /***
+     * 条件分页
+     * @param brand  查询条件实体
+     * @param pageNum 页码
+     * @param pageSize 每页条数
+     * @return
+     */
     public Result<PageVo> findPage(Brand brand, int pageNum, int pageSize) {
         try {
             PageHelper.startPage(pageNum,pageSize);
