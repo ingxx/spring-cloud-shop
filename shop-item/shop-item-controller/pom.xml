@@ -27,7 +27,7 @@
         </dependency>
         <dependency>
             <groupId>top.ingxx</groupId>
-            <artifactId>shop-item-pojo</artifactId>
+            <artifactId>shop-item-model</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

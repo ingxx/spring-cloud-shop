@@ -1,19 +1,10 @@
-app.controller('brandController', function ($scope, $http, brandService) {
-    $scope.paginationConf = {
-        currentPage: 1,
-        totalItems: 10,
-        itemsPerPage: 10,
-        perPageOptions: [10, 20, 30],
-        onChange: function () {
-            $scope.reloadList();
-        }
-    };
-    $scope.reloadList = function () {
-        $scope.search($scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
-    };
+app.controller('brandController', function ($scope, $http, $controller, brandService) {
+
+    $controller('baseController', {$scope: $scope});
+
     $scope.searchEntity = {};
     $scope.search = function (page, size) {
-        brandService.search(page,size,$scope.searchEntity).success(
+        brandService.search(page, size, $scope.searchEntity).success(
             function (data) {
                 $scope.list = data.data.rows;
                 $scope.paginationConf.totalItems = data.data.total;
@@ -52,15 +43,7 @@ app.controller('brandController', function ($scope, $http, brandService) {
                 }
             })
     };
-    $scope.selectIds = [];
-    $scope.updateSelection = function ($event, id) {
-        if ($event.target.checked) {
-            $scope.selectIds.push(id);
-        } else {
-            var index = $scope.selectIds.indexOf(id);
-            $scope.selectIds.splice(index, 1);
-        }
-    };
+
     $scope.delete = function () {
         brandService.delete($scope.selectIds).success(
             function (data) {

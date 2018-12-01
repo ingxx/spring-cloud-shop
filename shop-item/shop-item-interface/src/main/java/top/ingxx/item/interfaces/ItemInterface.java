@@ -1,9 +1,8 @@
 package top.ingxx.item.interfaces;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import top.ingxx.item.pojo.Brand;
+import top.ingxx.item.pojo.TbBrand;
 
 import java.util.List;
 
@@ -13,5 +12,5 @@ import java.util.List;
 @FeignClient(name = "item-service")
 public interface ItemInterface {
     @GetMapping("/findAll")
-    List<Brand> findAll();
+    List<TbBrand> findAll();
 }

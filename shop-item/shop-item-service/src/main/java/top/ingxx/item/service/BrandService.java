@@ -11,8 +11,8 @@ import top.ingxx.common.enums.ExceptionEnum;
 import top.ingxx.common.exception.ShopException;
 import top.ingxx.common.vo.PageVo;
 import top.ingxx.common.vo.Result;
-import top.ingxx.item.dao.BrandDao;
-import top.ingxx.item.pojo.Brand;
+import top.ingxx.item.dao.TbBrandDao;
+import top.ingxx.item.pojo.TbBrand;
 
 import java.util.List;
 
@@ -21,15 +21,15 @@ import java.util.List;
 public class BrandService {
 
     @Autowired
-    private BrandDao brandDao;
+    private TbBrandDao tbBrandDao;
 
     /***
      * 查询所有品牌
      * @return
      */
-    public Result<List<Brand>> selectAll() {
+    public Result<List<TbBrand>> selectAll() {
         try {
-            return Result.success(brandDao.selectAll());
+            return Result.success(tbBrandDao.selectAll());
         } catch (Exception e) {
             e.printStackTrace();
             log.error("查询失败", e);
@@ -46,8 +46,8 @@ public class BrandService {
     public Result<PageVo> findPage(int pageNum, int pageSize) {
         try {
             PageHelper.startPage(pageNum, pageSize); //分页助手
-            Page<Brand> brands = (Page<Brand>) brandDao.selectAll(); //封装成pageVo返回
-            return Result.success(new PageVo(brands.getTotal(), brands.getResult())); //封装成通用返回对象
+            Page<TbBrand> tbBrands = (Page<TbBrand>) tbBrandDao.selectAll(); //封装成pageVo返回
+            return Result.success(new PageVo(tbBrands.getTotal(), tbBrands.getResult())); //封装成通用返回对象
         } catch (Exception e) {
             e.printStackTrace();
             log.error("查询失败", e);
@@ -57,27 +57,27 @@ public class BrandService {
 
     /***
      * 条件分页
-     * @param brand  查询条件实体
+     * @param tbBrand  查询条件实体
      * @param pageNum 页码
      * @param pageSize 每页条数
      * @return
      */
-    public Result<PageVo> findPage(Brand brand, int pageNum, int pageSize) {
+    public Result<PageVo> findPage(TbBrand tbBrand, int pageNum, int pageSize) {
         try {
             PageHelper.startPage(pageNum,pageSize);
-            Page<Brand> brands = new Page<>();
-            if(brand != null){
-                Example ex = new Example(Brand.class);
+            Page<TbBrand> tbBrands = new Page<>();
+            if(tbBrand != null){
+                Example ex = new Example(TbBrand.class);
                 Example.Criteria criteria = ex.createCriteria();
-                if(StringUtil.isNotEmpty(brand.getName())){
-                    criteria.andLike("name","%"+brand.getName()+"%");
+                if(StringUtil.isNotEmpty(tbBrand.getName())){
+                    criteria.andLike("name","%"+ tbBrand.getName()+"%");
                 }
-                if (StringUtil.isNotEmpty(brand.getFirstChar())){
-                    criteria.andLike("firstChar","%"+brand.getFirstChar()+"%");
+                if (StringUtil.isNotEmpty(tbBrand.getFirstChar())){
+                    criteria.andLike("firstChar","%"+ tbBrand.getFirstChar()+"%");
                 }
-                brands  = (Page<Brand>) brandDao.selectByExample(ex);
+                tbBrands = (Page<TbBrand>) tbBrandDao.selectByExample(ex);
             }
-            return Result.success(new PageVo(brands.getTotal(), brands.getResult()));
+            return Result.success(new PageVo(tbBrands.getTotal(), tbBrands.getResult()));
         } catch (Exception e) {
             e.printStackTrace();
             log.error("查询失败", e);
@@ -87,15 +87,16 @@ public class BrandService {
 
     /***
      * 新增品牌
-     * @param brand 新增对象
+     * @param tbBrand 新增对象
      * @return
      */
-    public Result<String> add(Brand brand) {
-        if (brand == null) {
+    public Result<String> add(TbBrand tbBrand) {
+        if (tbBrand == null) {
             throw new ShopException(ExceptionEnum.INSTALL_BRAND_ERROR);
         }
         try {
-            brandDao.insert(brand);
+            tbBrandDao.insert(tbBrand);
+            log.info(tbBrand.toString());
             return Result.success(null);
         } catch (Exception e) {
             e.printStackTrace();
@@ -109,10 +110,10 @@ public class BrandService {
      * @param id  商品ID
      * @return
      */
-    public Result<Brand> findOne(Long id) {
+    public Result<TbBrand> findOne(Long id) {
         try {
-            Brand brand = brandDao.selectByPrimaryKey(id);
-            return Result.success(brand);
+            TbBrand tbBrand = tbBrandDao.selectByPrimaryKey(id);
+            return Result.success(tbBrand);
         } catch (Exception e) {
             e.printStackTrace();
             log.error("查询失败", e);
@@ -123,12 +124,12 @@ public class BrandService {
 
     /***
      * 更新品牌
-     * @param brand 品牌实体
+     * @param tbBrand 品牌实体
      * @return
      */
-    public Result<String> update(Brand brand) {
+    public Result<String> update(TbBrand tbBrand) {
         try {
-            brandDao.updateByPrimaryKey(brand);
+            tbBrandDao.updateByPrimaryKey(tbBrand);
             return Result.success("更新成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -140,7 +141,7 @@ public class BrandService {
     public Result<String> delete(Long[] ids) {
         try {
             for (Long id : ids) {
-                brandDao.deleteByPrimaryKey(id);
+                tbBrandDao.deleteByPrimaryKey(id);
             }
             return Result.success("删除成功");
         } catch (Exception e) {

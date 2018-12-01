@@ -12,7 +12,7 @@
     <modules>
         <module>shop-item-interface</module>
         <module>shop-item-service</module>
-        <module>shop-item-pojo</module>
+        <module>shop-item-model</module>
         <module>shop-item-dao</module>
         <module>shop-item-controller</module>
     </modules>
